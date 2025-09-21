@@ -11,48 +11,54 @@
 # **************************************************************************** #
 
 # Ejecutables
-SERVER_NAME		= server
-CLIENT_NAME		= client
+CLIENT = client
+SERVER = server
+
+# Fuentes principales
+SRC_CLIENT = client.c
+SRC_SERVER = server.c
+
+# Carpetas de librerías
+LIBFT_DIR = libft
+PRINTF_DIR = ft_printf
+
+# Archivos fuente de librerías
+LIBFT_SRC = $(wildcard $(LIBFT_DIR)/*.c)
+PRINTF_SRC = $(wildcard $(PRINTF_DIR)/*.c)
+
+# Objetos
+LIBFT_OBJ = $(LIBFT_SRC:.c=.o)
+PRINTF_OBJ = $(PRINTF_SRC:.c=.o)
+OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+OBJ_SERVER = $(SRC_SERVER:.c=.o)
 
 # Compilador y flags
-CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -I. -Ift_printf
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(PRINTF_DIR)
 
-# ft_printf
-FT_PRINTF_DIR	= ft_printf
-FT_PRINTF_A		= $(FT_PRINTF_DIR)/libftprintf.a
+# Regla por defecto
+all: $(CLIENT) $(SERVER)
 
-# Archivos fuente
-COMMON_SRCS		= ft_atoi.c ft_strlen.c
-SERVER_SRCS		= server.c $(COMMON_SRCS)
-CLIENT_SRCS		= client.c $(COMMON_SRCS)
+# Cliente
+$(CLIENT): $(OBJ_CLIENT) $(LIBFT_OBJ) $(PRINTF_OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-SERVER_OBJS		= $(SERVER_SRCS:.c=.o)
-CLIENT_OBJS		= $(CLIENT_SRCS:.c=.o)
+# Servidor
+$(SERVER): $(OBJ_SERVER) $(LIBFT_OBJ) $(PRINTF_OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Reglas principales
-all: $(FT_PRINTF_A) $(SERVER_NAME) $(CLIENT_NAME)
-
-$(FT_PRINTF_A):
-	make -C $(FT_PRINTF_DIR)
-
-$(SERVER_NAME): $(SERVER_OBJS)
-	$(CC) $(CFLAGS) $(SERVER_OBJS) $(FT_PRINTF_A) -o $(SERVER_NAME)
-
-$(CLIENT_NAME): $(CLIENT_OBJS)
-	$(CC) $(CFLAGS) $(CLIENT_OBJS) $(FT_PRINTF_A) -o $(CLIENT_NAME)
-
-%.o: %.c
+# Compilación de objetos de libft y ft_printf
+$(LIBFT_DIR)/%.o: $(LIBFT_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(PRINTF_DIR)/%.o: $(PRINTF_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Limpieza
 clean:
-	make clean -C $(FT_PRINTF_DIR)
-	rm -f $(SERVER_OBJS) $(CLIENT_OBJS)
+	rm -f $(OBJ_CLIENT) $(OBJ_SERVER) $(LIBFT_OBJ) $(PRINTF_OBJ)
 
 fclean: clean
-	make fclean -C $(FT_PRINTF_DIR)
-	rm -f $(SERVER_NAME) $(CLIENT_NAME)
+	rm -f $(CLIENT) $(SERVER)
 
 re: fclean all
-
-.PHONY: all clean fclean re

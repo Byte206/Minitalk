@@ -27,11 +27,11 @@ void	send_message(int pid, char *message)
 		bits_i = 8;
 		while (bits_i--)
 		{
+			g_ack = 0;
 			if (c & 0b10000000)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			g_ack = 0;
 			while (!g_ack)
 				pause();
 			c <<= 1;
