@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#ifndef MINITALK_BONUS_H
+# define MINITALK_BONUS_H
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/types.h>
@@ -19,14 +19,12 @@
 # include "ft_printf/ft_printf.h"
 # include "libft/libft.h"
 # include <stddef.h>
+# include <string.h>
 
-int	ft_atoi(const char *nptr);
-size_t	ft_strlen(const char	*str);
-
-typedef struct s_mini
-{
-	int	server_pid;
-	int	client_pid;
-}	t_mini;
+int		check_num(char *argv);
+void	message_receive(int signum, siginfo_t *info, void *ucontent);
+void	handle_signal(void);
+void	send_message(int pid, char *message);
+void	signal_back(int signum);
 
 #endif

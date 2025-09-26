@@ -21,13 +21,9 @@
 # include <stddef.h>
 # include <string.h>
 
-int	ft_atoi(const char *nptr);
-size_t	ft_strlen(const char	*str);
-
-typedef struct s_mini
-{
-	int	server_pid;
-	int	client_pid;
-}	t_mini;
+int		check_num(char *argv);
+void	message_receive(int signum, siginfo_t *info, void *ucontent);
+void	handle_signal(void);
+void	send_message(int pid, char *message);
 
 #endif

@@ -12,7 +12,7 @@
 
 #include "minitalk.h"
 
-volatile sig_atomic_t	g_ack = 0;
+volatile sig_atomic_t	flag = 0;
 
 void	send_message(int pid, char *message)
 {
@@ -27,20 +27,18 @@ void	send_message(int pid, char *message)
 		bits_i = 8;
 		while (bits_i--)
 		{
-			g_ack = 0;
+			flag = 0;
 			if (c & 0b10000000)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			while (!g_ack)
+			while (!flag)
 				pause();
 			c <<= 1;
 		}
 		i++;
 	}
 }
-
-#include <string.h>
 
 int	check_num(char *argv)
 {
@@ -61,12 +59,12 @@ void	signal_back(int signum)
 	if (signum == SIGUSR1)
 	{
 		ft_printf("Received SIGUSR1\n");
-		g_ack = 1;
+		flag = 1;
 	}
 	else if (signum == SIGUSR2)
 	{
 		ft_printf("Received SIGUSR2\n");
-		g_ack = 1;
+		flag = 1;
 	}
 }
 

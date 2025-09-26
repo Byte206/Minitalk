@@ -16,7 +16,7 @@ void	message_receive(int signum, siginfo_t *info, void *ucontent)
 {
 	static int				bits_i = -1;
 	static unsigned char	c = 0;
-	
+
 	(void)info;
 	(void)ucontent;
 	if (bits_i < 0)
@@ -41,10 +41,10 @@ void	handle_signal(void)
 	sa_newsig.sa_flags = SA_SIGINFO;
 	if ((sigaction(SIGUSR1, &sa_newsig, NULL) == -1)
 		|| (sigaction(SIGUSR2, &sa_newsig, NULL) == -1))
-		{
-			ft_printf("Error at sigaction");
-			return ;
-		}
+	{
+		ft_printf("Error at sigaction");
+		return ;
+	}
 }
 
 int	main(int argc, char *argv[])
@@ -56,7 +56,7 @@ int	main(int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 	ft_printf ("PID:%d\n", getpid());
-			handle_signal();
+	handle_signal();
 	while (1)
 	{
 		pause();
