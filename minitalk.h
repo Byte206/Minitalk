@@ -19,6 +19,7 @@
 # include "ft_printf/ft_printf.h"
 # include "libft/libft.h"
 # include <stddef.h>
+# include <string.h>
 
 int	ft_atoi(const char *nptr);
 size_t	ft_strlen(const char	*str);

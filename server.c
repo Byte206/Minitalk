@@ -16,17 +16,15 @@ void	message_receive(int signum, siginfo_t *info, void *ucontent)
 {
 	static int				bits_i = -1;
 	static unsigned char	c = 0;
-
+	
+	(void)info;
 	(void)ucontent;
 	if (bits_i < 0)
 		bits_i = 7;
 	if (signum == SIGUSR1)
 	{
 		c |= (1 << bits_i);
-		kill(info->si_pid, SIGUSR1);
 	}
-	else
-		kill(info->si_pid, SIGUSR2);
 	bits_i--;
 	if (bits_i < 0)
 	{
