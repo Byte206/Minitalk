@@ -18,19 +18,15 @@ SERVER = server
 SRC_CLIENT = client.c
 SRC_SERVER = server.c
 
+OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
+OBJ_SERVER = $(SRC_SERVER:.c=.o)
+
 # Carpetas de librerías
 LIBFT_DIR = libft
 PRINTF_DIR = ft_printf
 
-# Archivos fuente de librerías
-LIBFT_SRC = $(wildcard $(LIBFT_DIR)/*.c)
-PRINTF_SRC = $(wildcard $(PRINTF_DIR)/*.c)
-
-# Objetos
-LIBFT_OBJ = $(LIBFT_SRC:.c=.o)
-PRINTF_OBJ = $(PRINTF_SRC:.c=.o)
-OBJ_CLIENT = $(SRC_CLIENT:.c=.o)
-OBJ_SERVER = $(SRC_SERVER:.c=.o)
+LIBFT = $(LIBFT_DIR)/libft.a
+FT_PRINTF = $(PRINTF_DIR)/libftprintf.a
 
 # Compilador y flags
 CC = gcc
@@ -40,25 +36,32 @@ CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR) -I$(PRINTF_DIR)
 all: $(CLIENT) $(SERVER)
 
 # Cliente
-$(CLIENT): $(OBJ_CLIENT) $(LIBFT_OBJ) $(PRINTF_OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+$(CLIENT): $(OBJ_CLIENT) $(LIBFT) $(FT_PRINTF)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_CLIENT) $(LIBFT) $(FT_PRINTF)
 
 # Servidor
-$(SERVER): $(OBJ_SERVER) $(LIBFT_OBJ) $(PRINTF_OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+$(SERVER): $(OBJ_SERVER) $(LIBFT) $(FT_PRINTF)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_SERVER) $(LIBFT) $(FT_PRINTF)
 
-# Compilación de objetos de libft y ft_printf
-$(LIBFT_DIR)/%.o: $(LIBFT_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+# Librerías
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-$(PRINTF_DIR)/%.o: $(PRINTF_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(FT_PRINTF):
+	$(MAKE) -C $(PRINTF_DIR)
 
 # Limpieza
 clean:
-	rm -f $(OBJ_CLIENT) $(OBJ_SERVER) $(LIBFT_OBJ) $(PRINTF_OBJ)
+	rm -f $(OBJ_CLIENT) $(OBJ_SERVER)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(PRINTF_DIR) clean
 
 fclean: clean
 	rm -f $(CLIENT) $(SERVER)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(PRINTF_DIR) fclean
 
 re: fclean all
+
+.PHONY: all clean fclean re
+

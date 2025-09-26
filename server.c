@@ -56,9 +56,10 @@ int	main(int argc, char *argv[])
 		exit (EXIT_FAILURE);
 	}
 	ft_printf ("PID:%d\n", getpid());
+			handle_signal();
 	while (1)
 	{
-		handle_signal();
+		pause();
 	}
 	return (0);
 }
