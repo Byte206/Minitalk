@@ -3,27 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gamorcil <gamorcil@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gamorcil <gamorcil@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 22:03:52 by gamorcil          #+#    #+#             */
-/*   Updated: 2025/06/30 22:03:52 by gamorcil         ###   ########.fr       */
+/*   Created: 2025/10/01 19:08:44 by gamorcil          #+#    #+#             */
+/*   Updated: 2025/10/01 19:11:00 by gamorcil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINITALK_H
 # define MINITALK_H
-# include <unistd.h>
-# include <stdlib.h>
-# include <sys/types.h>
+
+# include "libft.h"
 # include <signal.h>
-# include "ft_printf/ft_printf.h"
-# include "libft/libft.h"
-# include <stddef.h>
-# include <string.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <stdio.h>
 
-int		check_num(char *argv);
-void	message_receive(int signum, siginfo_t *info, void *ucontent);
-void	handle_signal(void);
-void	send_message(int pid, char *message);
-
-#endif
