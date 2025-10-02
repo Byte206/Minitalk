@@ -13,9 +13,28 @@
 #ifndef MINITALK_H
 # define MINITALK_H
 
-# include "libft.h"
+# include "libft/libft.h"
+# include "ft_printf/ft_printf.h"
 # include <signal.h>
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdio.h>
 
+
+//Server
+typedef struct s_global
+{
+	int		client_pid;
+	int		header_flag;
+	int		str_flag;
+	int     str_len;
+    int     bit_index;
+    char    *str;
+}	t_global;
+
+void	set_signals(void);
+void	handle_signal(int signum, siginfo_t *info, void *context);
+void	set_str(int signum);
+void	set_header(int signum);
+
+#endif
