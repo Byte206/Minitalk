@@ -18,7 +18,7 @@ void	set_header(int signum)
 {
 	int	bit;
 
-	bit = (signum == SIGUSR2);
+	bit = (signum == SIGUSR1);
 	if (g_server_data.bit_index < 32)
 	{
 		g_server_data.str_len |= (bit << (31 - g_server_data.bit_index));
@@ -44,7 +44,7 @@ void	set_str(int signum)
 	static int	str_index;
 	static int	letter;
 
-	bit = (signum == SIGUSR2);
+	bit = (signum == SIGUSR1);
 	if (g_server_data.bit_index % 8 < 8)
 	{
 		letter |= (bit << (7 - (g_server_data.bit_index % 8)));
@@ -60,9 +60,11 @@ void	set_str(int signum)
 	{
 		ft_printf("%s\n", g_server_data.str);
 		free(g_server_data.str);
+		kill(g_server_data.client_pid, SIGUSR1);
 		ft_memset(&g_server_data, 0, sizeof(t_global));
 		str_index = 0;
 		letter = 0;
+		return ;
 	}
 	kill(g_server_data.client_pid, SIGUSR1);
 }
@@ -73,6 +75,7 @@ void	handle_signal(int signum, siginfo_t *info, void *context)
 	if (g_server_data.client_pid == 0)
 	{
 		g_server_data.client_pid = info->si_pid;
+		ft_printf("Client PID:%d\n", g_server_data.client_pid);
 		g_server_data.header_flag = 1;
 		kill(g_server_data.client_pid, SIGUSR1);
 		return ;

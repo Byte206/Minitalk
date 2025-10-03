@@ -36,5 +36,11 @@ void	set_signals(void);
 void	handle_signal(int signum, siginfo_t *info, void *context);
 void	set_str(int signum);
 void	set_header(int signum);
+//client
+
+void    send_len(int str_len, int server_pid);
+void	set_signal();
+void	connect(int server_pid);
+void	handle_signal_client(int sigum, siginfo_t *info, void *context);
 
 #endif
