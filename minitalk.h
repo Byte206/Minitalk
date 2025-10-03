@@ -32,6 +32,7 @@ typedef struct s_global
     char    *str;
 }	t_global;
 
+void	client_finish(void);
 void	set_signals(void);
 void	handle_signal(int signum, siginfo_t *info, void *context);
 void	set_str(int signum);

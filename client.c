@@ -26,13 +26,13 @@ void	send_len(int str_len, int server_pid)
 		{
 			if (kill(server_pid, SIGUSR1) == -1)
 				ft_printf("Error sending signal\n");
-			ft_printf("SIGUSR1\n");
+			//ft_printf("SIGUSR1\n");
 		}
 		else
 		{
 			if (kill(server_pid, SIGUSR2) == -1)
 				ft_printf("Error sending signal\n");
-			ft_printf("SIGUSR2\n");
+			//ft_printf("SIGUSR2\n");
 		}
 		while (!g_flag)
 			pause();
@@ -74,6 +74,7 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: ./client [SERVER_PID] [MESSAGE]\n");
 		return (1);
 	}
+	ft_printf("Client PID:%d\n", getpid());
 	server_pid = ft_atoi(argv[1]);
 	str_len = ft_strlen(argv[2]);
 	g_flag = 0;

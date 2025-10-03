@@ -28,7 +28,7 @@ CLIENT		= client
 
 # ================================= ARCHIVOS ================================== #
 
-SRC_SERVER	= server.c
+SRC_SERVER	= server.c server_utils.c
 SRC_CLIENT	= client.c client_utils.c
 
 OBJ_SERVER	= $(SRC_SERVER:.c=.o)

@@ -35,6 +35,7 @@ void	set_header(int signum)
 		g_server_data.str_flag = 1;
 		g_server_data.bit_index = 0;
 	}
+	usleep(200);
 	kill(g_server_data.client_pid, SIGUSR1);
 }
 
@@ -58,14 +59,13 @@ void	set_str(int signum)
 	}
 	if (g_server_data.bit_index / 8 == g_server_data.str_len)
 	{
-		ft_printf("%s\n", g_server_data.str);
-		free(g_server_data.str);
-		kill(g_server_data.client_pid, SIGUSR1);
-		ft_memset(&g_server_data, 0, sizeof(t_global));
+		client_finish();
 		str_index = 0;
 		letter = 0;
 		return ;
 	}
+	if (g_server_data.bit_index < 16)
+		usleep(100);
 	kill(g_server_data.client_pid, SIGUSR1);
 }
 
@@ -77,7 +77,9 @@ void	handle_signal(int signum, siginfo_t *info, void *context)
 		g_server_data.client_pid = info->si_pid;
 		ft_printf("Client PID:%d\n", g_server_data.client_pid);
 		g_server_data.header_flag = 1;
+		usleep(200);
 		kill(g_server_data.client_pid, SIGUSR1);
+		ft_printf("Signal sent to client\n");
 		return ;
 	}
 	if (g_server_data.header_flag == 1)
@@ -91,6 +93,8 @@ void	set_signals(void)
 	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGUSR1);
+	sigaddset(&sa.sa_mask, SIGUSR2);
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = handle_signal;
 	sigaction(SIGUSR1, &sa, NULL);
