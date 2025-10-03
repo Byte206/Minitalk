@@ -20,12 +20,18 @@ void    send_len(int str_len, int server_pid)
     while (i >= 0)
     {
         if (str_len & (1ULL << i))
+		{
             if (kill(server_pid, SIGUSR1) == -1)
                 ft_printf("Error sending signal\n");
-        else
+			ft_printf("SIGUSR1\n");
+		}
+		else
+		{
             if (kill(server_pid, SIGUSR2) == -1)
                 ft_printf("Error sending signal\n");
-        i--;
+			ft_printf("SIGUSR2\n");
+		}
+		i--;
         usleep(500 * 500);
     }
 }

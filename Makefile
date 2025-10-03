@@ -51,14 +51,14 @@ LIBS		= -L$(LIBFT_DIR) -lft -L$(FT_PRINTF_DIR) -lftprintf
 
 # ================================== REGLAS =================================== #
 
-all: $(LIBFT) $(FT_PRINTF) $(NAME)
+all: $(LIBFT) $(FT_PRINTF) $(NAME) $(CLIENT)
 
 $(NAME): $(OBJ_SERVER)
 	@echo "$(CYAN)🔨 Compilando $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJ_SERVER) $(LIBS) -o $(NAME)
 	@echo "$(GREEN)✅ $(NAME) compilado con éxito!$(RESET)"
 
-$(CLIENT): $(LIBFT) $(FT_PRINTF) $(OBJ_CLIENT)
+$(CLIENT): $(OBJ_CLIENT)
 	@echo "$(CYAN)🔨 Compilando $(CLIENT)...$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJ_CLIENT) $(LIBS) -o $(CLIENT)
 	@echo "$(GREEN)✅ $(CLIENT) compilado con éxito!$(RESET)"
