@@ -46,8 +46,10 @@ void	send_str(int server_pid, char *str, int str_len)
 	int	bit;
 
 	i = 0;
+	//ft_printf("[CLIENT] Starting to send %d chars\n", str_len);
 	while (i < str_len)
 	{
+		//ft_printf("[CLIENT] Sending char '%c' (%d/%d)\n", str[i], i+1, str_len);
 		bit = 7;
 		while (bit >= 0)
 		{
@@ -56,12 +58,15 @@ void	send_str(int server_pid, char *str, int str_len)
 				kill(server_pid, SIGUSR1);
 			else
 				kill(server_pid, SIGUSR2);
+			//ft_printf("[CLIENT] Sent bit %d, waiting ACK...\n", 7-bit);
 			while (!g_flag)
 				pause();
+			//ft_printf("[CLIENT] ACK received!\n");
 			bit--;
 		}
 		i++;
 	}
+	//ft_printf("[CLIENT] All chars sent successfully\n");
 }
 
 int	main(int argc, char **argv)
@@ -74,7 +79,7 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: ./client [SERVER_PID] [MESSAGE]\n");
 		return (1);
 	}
-	ft_printf("Client PID:%d\n", getpid());
+	//ft_printf("Client PID:%d\n", getpid());
 	server_pid = ft_atoi(argv[1]);
 	str_len = ft_strlen(argv[2]);
 	g_flag = 0;

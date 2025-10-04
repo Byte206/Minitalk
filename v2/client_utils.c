@@ -23,17 +23,32 @@ void	handle_signal_client(int signum, siginfo_t *info, void *context)
 
 void	connect(int server_pid)
 {
-	if (kill(server_pid, SIGUSR1) == -1)
+	int	attempts;
+	
+	attempts = 0;
+	while (attempts < 30)
 	{
-		ft_printf("Error connecting to server\n");
-		return ;
+		if (kill(server_pid, SIGUSR1) == -1)
+		{
+			ft_printf("Error connecting to server\n");
+			return;
+		}
+		
+		ft_printf("Waiting server signal (attempt %d/30)\n", attempts + 1);
+		
+		// Espera 2 segundos como máximo
+		sleep(2);
+		
+		if (g_flag)  // Si recibió confirmación
+			break;
+		
+		attempts++;
 	}
-	while (!g_flag)
-	{
-		ft_printf("Waiting server signal\n");
-		pause();
-	}
-	ft_printf("Server connected\n");
+	
+	if (g_flag)
+		ft_printf("Server connected\n");
+	else
+		ft_printf("Server connection timeout\n");
 }
 
 void	set_signal(void)

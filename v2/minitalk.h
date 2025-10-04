@@ -29,6 +29,8 @@ typedef struct s_global
 	int		str_flag;
 	int     str_len;
     int     bit_index;
+	int		str_index;
+	int		current_letter;
     char    *str;
 }	t_global;
 

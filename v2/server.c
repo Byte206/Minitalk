@@ -17,7 +17,7 @@ t_global	g_server_data;
 void	set_header(int signum)
 {
 	int	bit;
-
+	
 	bit = (signum == SIGUSR1);
 	if (g_server_data.bit_index < 32)
 	{
@@ -35,63 +35,59 @@ void	set_header(int signum)
 		g_server_data.str_flag = 1;
 		g_server_data.bit_index = 0;
 	}
-	usleep(200);
-	kill(g_server_data.client_pid, SIGUSR1);
 }
 
 void	set_str(int signum)
 {
-	int			bit;
-	static int	str_index;
-	static int	letter;
-
+	int	bit;
+	
 	bit = (signum == SIGUSR1);
+	
 	if (g_server_data.bit_index % 8 < 8)
 	{
-		letter |= (bit << (7 - (g_server_data.bit_index % 8)));
+		g_server_data.current_letter |= (bit << (7 - (g_server_data.bit_index % 8)));
 		g_server_data.bit_index++;
 	}
 	if (g_server_data.bit_index % 8 == 0)
 	{
-		g_server_data.str[str_index] = letter;
-		letter = 0;
-		str_index++;
+		g_server_data.str[g_server_data.str_index] = g_server_data.current_letter;
+		g_server_data.current_letter = 0;
+		g_server_data.str_index++;
 	}
 	if (g_server_data.bit_index / 8 == g_server_data.str_len)
 	{
+		kill(g_server_data.client_pid, SIGUSR1);
 		client_finish();
-		str_index = 0;
-		letter = 0;
-		return ;
+		return;
 	}
-	if (g_server_data.bit_index < 16)
-		usleep(100);
-	kill(g_server_data.client_pid, SIGUSR1);
 }
 
 void	handle_signal(int signum, siginfo_t *info, void *context)
 {
 	(void)context;
+	
 	if (g_server_data.client_pid == 0)
 	{
 		g_server_data.client_pid = info->si_pid;
-		ft_printf("Client PID:%d\n", g_server_data.client_pid);
+		ft_printf("Client PID: %d\n", g_server_data.client_pid);
 		g_server_data.header_flag = 1;
-		usleep(200);
 		kill(g_server_data.client_pid, SIGUSR1);
-		ft_printf("Signal sent to client\n");
-		return ;
+		return;
 	}
+	
 	if (g_server_data.header_flag == 1)
 		set_header(signum);
 	else if (g_server_data.str_flag == 1)
 		set_str(signum);
+	
+	if (g_server_data.client_pid != 0)
+		kill(g_server_data.client_pid, SIGUSR1);
 }
 
 void	set_signals(void)
 {
 	struct sigaction	sa;
-
+	
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGUSR1);
 	sigaddset(&sa.sa_mask, SIGUSR2);
